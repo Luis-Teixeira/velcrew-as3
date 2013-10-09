@@ -1,0 +1,62 @@
+	private function resizeObject(targetObject:DisplayObject):void {
+		//access stage width here. We want to respond to stage dimension changes immediately
+		_stageWidth = _stageRef.stageWidth;
+		_stageHeight = _stageRef.stageHeight;
+		
+		if (useMinStageSize) {
+			if (_stageWidth <= XminSize && _stageHeight <= YminSize) {
+				return;
+			}
+		}
+		//test if the content is only getting scaled upwards from its natural size
+		if(onlyScaleContentUp){
+			_orgW > _stageRef.stageWidth * maxContentScale ? byPassResize = true : byPassResize = false;
+			_orgH > _stageRef.stageHeight * maxContentScale ? byPassResize = true : byPassResize = false;
+		}
+		
+		if(byPassResize) {
+			targetObject.x = _stageWidth*xPos - targetObject.width * xPos;
+			targetObject.y = _stageHeight*yPos - targetObject.height * yPos;
+			return;
+		}
+		
+		//determine what resize mode we are in, and respond accordingly
+		switch (resizeMode) {
+		case "full":
+		if (_stageHeight / _stageWidth > targetObject.height / targetObject.width) {
+				_img_prop = targetObject.width/targetObject.height;
+				targetObject.height = _stageHeight*maxContentScale;
+				targetObject.width = (_stageHeight*maxContentScale) * _img_prop;
+			} else {
+				_img_prop = targetObject.height/targetObject.width;
+				targetObject.width = _stageWidth * maxContentScale;
+				targetObject.height = (_stageWidth * maxContentScale) * _img_prop;
+			}
+			
+			targetObject.x = _stageWidth * xPos - targetObject.width * xPos;
+			targetObject.y = _stageHeight * yPos - targetObject.height * yPos;
+			break;
+			
+		case "height" :
+			_img_prop = targetObject.width/targetObject.height;
+			targetObject.height = _stageHeight* maxContentScale;
+			targetObject.width = (_stageHeight*maxContentScale) * _img_prop ;
+			targetObject.x = _stageWidth * xPos - targetObject.width * xPos;
+			targetObject.y = _stageHeight * yPos - targetObject.height * yPos;
+			break;
+		case "width" :
+			_img_prop = targetObject.height/targetObject.width;
+			targetObject.width = _stageWidth * maxContentScale;
+			targetObject.height = (_stageWidth * maxContentScale) * _img_prop ;
+			targetObject.x = _stageWidth*xPos - targetObject.width * xPos;
+			targetObject.y = _stageHeight*yPos - targetObject.height * yPos;
+			break;
+		}
+	}
+	
+	//clean up any listeners if the target object is removed from the display list.
+	private function cleanUpClass(event:Event = null):void {
+		_stageRef.removeEventListener(Event.RESIZE, resizeListener);
+		_resizeTarget.removeEventListener(Event.REMOVED_FROM_STAGE,cleanUpClass);
+		_resizeTarget = null;
+	}

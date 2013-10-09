@@ -1,0 +1,50 @@
+10
+
+dir
+10
+https://velcrew.googlecode.com/svn/branches/com/velcrew
+https://velcrew.googlecode.com/svn
+
+
+
+2009-06-02T14:57:11.872794Z
+7
+luispteixeira
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+6d3975aa-4b90-11de-b305-25f493754997
+
+
+
+
+
+
+0
+
+display
+dir
+
+forms
+dir
+
+maths
+dir
+
+utils
+dir
+
+video
+dir
+
